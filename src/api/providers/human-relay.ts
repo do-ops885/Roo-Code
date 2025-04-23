@@ -1,24 +1,20 @@
 // filepath: e:\Project\Roo-Code\src\api\providers\human-relay.ts
 import { Anthropic } from "@anthropic-ai/sdk"
-import { ApiHandlerOptions, ModelInfo } from "../../shared/api"
+import { ApiHandlerOptions, ModelInfo, humanRelayModelId, humanRelayModels } from "../../shared/api"
 import { ApiHandler, SingleCompletionHandler } from "../index"
 import { ApiStream } from "../transform/stream"
 import * as vscode from "vscode"
-import { ExtensionMessage } from "../../shared/ExtensionMessage"
-import { getPanel } from "../../activate/registerCommands" // Import the getPanel function
+import { BaseProvider } from "./base-provider"
 
 /**
  * Human Relay API processor
  * This processor does not directly call the API, but interacts with the model through human operations copy and paste.
  */
-export class HumanRelayHandler implements ApiHandler, SingleCompletionHandler {
-	private options: ApiHandlerOptions
-
+export class HumanRelayHandler extends BaseProvider implements ApiHandler, SingleCompletionHandler {
+	protected options: ApiHandlerOptions
 	constructor(options: ApiHandlerOptions) {
+		super()
 		this.options = options
-	}
-	countTokens(content: Array<Anthropic.Messages.ContentBlockParam>): Promise<number> {
-		return Promise.resolve(0)
 	}
 
 	/**
@@ -60,20 +56,10 @@ export class HumanRelayHandler implements ApiHandler, SingleCompletionHandler {
 	/**
 	 * Get model information
 	 */
-	getModel(): { id: string; info: ModelInfo } {
-		// Human relay does not depend on a specific model, here is a default configuration
+	override getModel(): { id: string; info: ModelInfo } {
 		return {
-			id: "human-relay",
-			info: {
-				maxTokens: 16384,
-				contextWindow: 100000,
-				supportsImages: true,
-				supportsPromptCache: false,
-				supportsComputerUse: true,
-				inputPrice: 0,
-				outputPrice: 0,
-				description: "Calling web-side AI model through human relay",
-			},
+			id: humanRelayModelId,
+			info: humanRelayModels[humanRelayModelId],
 		}
 	}
 

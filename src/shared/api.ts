@@ -1362,3 +1362,18 @@ export const vscodeLlmModels = {
 		maxInputTokens: number
 	}
 >
+
+// Human Relay
+export const humanRelayModelId = "human-relay"
+export const humanRelayModels = {
+	"human-relay": {
+		maxTokens: -1,
+		contextWindow: -1,
+		supportsImages: true,
+		supportsPromptCache: false,
+		supportsComputerUse: true,
+		inputPrice: 0,
+		outputPrice: 0,
+		description: "Calling web-side AI model through human relay",
+	},
+} as const satisfies Record<string, ModelInfo>
